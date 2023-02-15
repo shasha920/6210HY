@@ -1,0 +1,44 @@
+---
+title: "Assignment3"
+author: "Hua Yang"
+date: "2023-02-15"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+
+```{r}
+toyota.df<-read.csv("ToyotaCorolla.csv")
+```
+
+## Bar Chart
+
+
+```{r}
+data.for.plot<-aggregate(toyota.df$KM, by=list(toyota.df$Automatic),FUN=mean)
+names(data.for.plot)<-c("Automatic","MeanKM")
+barplot(data.for.plot$MeanKM,names.arg = data.for.plot$Automatic,
+        xlab="Automatic",ylab="Average KM")
+```
+
+## 2.Scatter Plot
+
+```{r}
+plot(toyota.df$Price~toyota.df$KM,xlab="Mileage in kilometers",ylab="Price")
+```
+
+## 3.Histgram
+
+```{r}
+hist(toyota.df$KM,breaks = 25,xlab = "Mileage in kilometers")
+```
+
+## 4.Boxplot
+
+```{r}
+boxplot(toyota.df$Price~toyota.df$Mistlamps,xlab = "Mistlamps",ylab = "Price")
+```
