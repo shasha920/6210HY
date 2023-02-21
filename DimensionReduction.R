@@ -55,6 +55,7 @@ cor(cereals.df[c("rating","calories")])
 
 #Table 4.10
 #PCA
+#only “rating” & “calories”
 pcs<-prcomp(data.frame(cereals.df$calories,cereals.df$rating))
 summary(pcs)
 attributes(pcs)
@@ -63,6 +64,7 @@ scores<-pcs$x
 head(scores,5)
 
 #Table 4.11
+#from "protein" to "vitamins"
 pcs<-prcomp(na.omit(cereals.df[,c(5:12)]))
 pcs$rotation[,1:5]
 pcs$x[1:5,1:5]
