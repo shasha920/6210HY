@@ -53,3 +53,23 @@ barplot(gain$mean.resp/mean(price),names.arg = gain$depth,
         xlab = "Percentile",ylab="Mean Resonse",main="Decile-wise lift chart")
 
 #Figure 5.6
+lift.df<-read.csv("liftexample.csv")
+#Ranking Performance
+#Lift Chart
+#Use library "caret"
+#Parameter "ref" in lift function is used to indicate shich one is the class of interest
+lift.example<-lift(relevel(as.factor(lift.df$actual),ref="1")~prob,data=lift.df)
+#xyplot plot style gain
+xyplot(lift.example,plot="gain")
+#Use libraray "gains"
+gain<-gains(lift.df$actual,lift.df$prob,groups = dim(lift.df)[1])
+plot(c(0,gain$cume.pct.of.total*sum(lift.df$actual))~c(0,gain$cume.obs),
+     xlab="# cases",ylab="Cumulative",type="l")
+lines(c(0,sum(lift.df$actual))~c(0,dim(lift.df)[1]),col="pink",lty=5)
+
+#Figure 5.7
+#Decile-wise lift chart
+lift.df<-read.csv("liftexample.csv")
+gain<-gains(lift.df$actual,lift.df$prob)
+barplot(gain$mean.resp/mean(lift.df$actual),names.arg = gain$depth,xlab = "Percentile",
+        ylab="Mean Response",main = "Decile-wise lift chart")
