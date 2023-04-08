@@ -60,3 +60,35 @@ confusionMatrix(bank.full.ct.pred.train,as.factor(bank.train.df$Personal.Loan))
 #Performance evaluation on validation set
 bank.full.ct.pred.valid<-predict(bank.full.ct,bank.valid.df,type = "class")
 confusionMatrix(bank.full.ct.pred.valid,as.factor(bank.valid.df$Personal.Loan))
+
+#Table 9.4
+#Perform cross validation within training dataset and record Compexity Parameters(cp)
+bank.ct<-rpart(Personal.Loan~., data=bank.train.df,method = "class",
+               control = rpart.control(cp=0.00001,minsplit = 1,xval=10))
+#rel error (relative error): training erro
+#xerror (relative error):validation error
+#xstd (relative stdev):validation stdev
+#Each row represents a different level of tree
+#which is the best tree with the same level
+printcp(bank.ct)
+#The plot shows the change of xerror with CP
+#The minimum line is the minimum xerror plus xstd
+#The first xerror that drops below the minmum line
+#corresponds to the best cp - best pruned tree
+plotcp(bank.ct)
+
+
+#Figure 9.14
+set.seed(11)
+toyota.df<-read.csv("ToyotaCorolla.csv")
+toyota.df$Fuel_Type<-factor(toyota.df$Fuel_Type)
+toyota.selected.var<-c(3,4,7,8,9,10,12,13,14,17,18)
+toyota.train.index<-sample(c(1:dim(toyota.df)[1]),dim(toyota.df)[1]*0.6)
+toyota.train.df<-toyota.df[toyota.train.index,toyota.selected.var]
+#Build the default (best-pruned) regression tree
+toyota.default.rt<-rpart(Price~.,data=toyota.train.df,method = "anova")
+#Plot tree
+options(scipen = 999)
+prp(toyota.default.rt,type=1,extra=1,under=TRUE,split.font = 2,
+    under.font = 1,nn.font = 3,varlen = -10,
+    box.col = ifelse(toyota.default.rt$frame$var=="<leaf>","gray","pink"))
